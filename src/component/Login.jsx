@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MDBBtn,
   MDBContainer,
@@ -9,12 +9,20 @@ import {
   MDBCardImage,
   MDBInput,
   MDBIcon,
-  MDBCheckbox
 }
 from 'mdb-react-ui-kit';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import login from '../api/login';
+import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { Button } from 'antd';
 
 function Login() {
+  const [email, setEmail]= useState("")
+  const [password, setPassword]= useState("")
+  const navigate= useNavigate()
+
   return (
     <MDBContainer fluid>
 
@@ -27,17 +35,29 @@ function Login() {
 
               <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="envelope me-3" size='lg'/>
-                <MDBInput label='Your Email' id='form2' type='email'/>
+                <MDBInput value={email} onChange={(e)=> setEmail(e.target.value)} label='Your Email' id='form2' type='email'/>
               </div>
 
               <div className="d-flex flex-row align-items-center mb-4">
                 <MDBIcon fas icon="lock me-3" size='lg'/>
-                <MDBInput label='Password' id='form3' type='password'/>
+                <MDBInput value={password} onChange={(e)=> setPassword(e.target.value)} label='Password' id='form3' type='password'/>
               </div>
 
-              <MDBBtn className='mb-4' size='lg'>Đăng nhập</MDBBtn>
-
+              <MDBBtn onClick={async ()=> {
+                const result= await login(email, password)
+                if(result?.login=== true) {
+                  swal("Thông báo", "Đăng nhập thành công", "success")
+                  .then(()=> navigate("/timekeeping", {state: {login: true, email: email, user: result?.user}}))
+                  .then(()=> Cookies.set("uid", user?.[0]))
+                } 
+                else {
+                  swal("Thông báo", "Đăng nhập thất bại", "error")
+                }
+              }} className='mb-4' size='lg'>Đăng nhập</MDBBtn>
+              <div>Bạn chưa có tài khoản ?</div>
+              <Button type={"primary"} onClick={()=> navigate("/signup")}>Đăng ký</Button>
             </MDBCol>
+            
 
             <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
               <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp' fluid/>

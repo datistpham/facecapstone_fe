@@ -9,20 +9,9 @@ import Information from './component/Information'
 import TimeSheet from './pages/TimeSheets/TimeSheet'
 import Staff from './component/Staff/Staff'
 import Home from './component/Home/Home'
+import ConfirmStaff from './component/ConfirmStaff/ConfirmStaff'
 
 function App() {
-  const [data, setData]= useState()
-  useEffect(()=> {
-    (async ()=> {
-      const res= await axios({
-        url: "http://localhost:5000",
-        method: "get"
-
-      })
-      const result= await res.data
-      return result
-    })()
-  }, [])
   return (
     <Router>
       <Routes>
@@ -34,6 +23,7 @@ function App() {
         <Route path={"/information"} element={<Information />} />
         <Route path={"/time-sheets"} element={<TimeSheet />} />
         <Route path={"/staff"} element={<Staff />} />
+        <Route path={"/confirm-staff"} element={<ConfirmStaff />} />
       </Routes>
     </Router>
   )

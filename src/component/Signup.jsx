@@ -16,6 +16,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import signup from '../api/signup';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'antd';
 
 function Signup() {
   const [name, setName]= useState("")
@@ -69,7 +70,7 @@ function Signup() {
                     const result= await signup(name, email, phone, password)
                     if(result?.signup=== true) {
                       swal("Thông báo", "Đăng ký thành công", "success")
-                      .then(()=> navigate("/confirm-staff", {replace: true, uid: result?.uid}))
+                      .then(()=> navigate("/confirm-staff", {replace: true, state: {uid: result?.uid?.[0]+ "_"}}))
                     }
                     else {
                       swal("Thông báo", "Đăng ký thất bại, Email đã tồn tại, vui lòng thử với email khác", "error")
@@ -80,7 +81,8 @@ function Signup() {
                   }
 
               }} className='mb-4' size='lg'>Đăng ký</MDBBtn>
-
+                <div>Bạn đã có tài khoản ?</div>
+              <Button type={"primary"} onClick={()=> navigate("/login")}>Đăng nhập</Button>
             </MDBCol>
 
             <MDBCol md='10' lg='6' className='order-1 order-lg-2 d-flex align-items-center'>
